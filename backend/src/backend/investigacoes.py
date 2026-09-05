@@ -234,3 +234,70 @@ def alterar_investigacao(
     conn.close()
 
     return {"mensagem": "Investigação atualizada com sucesso"}
+
+
+@router.delete("/{investigacao_id}")
+def excluir_investigacao(
+    investigacao_id: uuid.UUID,
+    usuario_id: str = Depends(obter_usuario_id_atual),
+):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT usuario_id FROM INVESTIGACAO WHERE id = %s",
+        (str(investigacao_id),),
+    )
+
+    resultado = cursor.fetchone()
+
+    if resultado is None:
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=404, detail="Investigação não encontrada")
+
+    if str(resultado[0]) != usuario_id:
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    investigacao_id_str = str(investigacao_id)
+
+    cursor.execute(
+        "DELETE FROM EVIDENCIA WHERE afirmacao_id IN "
+        "(SELECT id FROM AFIRMACAO WHERE investigacao_id = %s)",
+        (investigacao_id_str,),
+    )
+    cursor.execute(
+        "DELETE FROM PERGUNTA WHERE afirmacao_id IN "
+        "(SELECT id FROM AFIRMACAO WHERE investigacao_id = %s)",
+        (investigacao_id_str,),
+    )
+    cursor.execute(
+        "DELETE FROM REFLEXAO WHERE afirmacao_id IN "
+        "(SELECT id FROM AFIRMACAO WHERE investigacao_id = %s)",
+        (investigacao_id_str,),
+    )
+    cursor.execute(
+        "DELETE FROM AFIRMACAO WHERE investigacao_id = %s",
+        (investigacao_id_str,),
+    )
+    cursor.execute(
+        "DELETE FROM FONTE WHERE investigacao_id = %s",
+        (investigacao_id_str,),
+    )
+    cursor.execute(
+        "DELETE FROM CONCLUSAO WHERE investigacao_id = %s",
+        (investigacao_id_str,),
+    )
+    cursor.execute(
+        "DELETE FROM INVESTIGACAO WHERE id = %s",
+        (investigacao_id_str,),
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return {"mensagem": "Investigação excluída com sucesso"}
