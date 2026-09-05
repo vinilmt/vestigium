@@ -4,7 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import bcrypt
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel
 
 from backend.db import conectar_banco
@@ -86,3 +86,28 @@ def login(dados: LoginRequest):
     TOKENS[token] = str(usuario_id)
 
     return {"token": token}
+
+
+@router.get("/me")
+def me(usuario_id: str = Depends(obter_usuario_id_atual)):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, email, data_criacao FROM USUARIO WHERE id = %s",
+        (usuario_id,),
+    )
+
+    resultado = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if resultado is None:
+        raise HTTPException(status_code=403, detail="Token inválido")
+
+    return {
+        "id": str(resultado[0]),
+        "email": resultado[1],
+        "data_criacao": resultado[2],
+    }
