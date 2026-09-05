@@ -1,3 +1,4 @@
+import secrets
 import uuid
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -14,6 +15,11 @@ TOKENS: dict[str, str] = {}
 
 
 class RegistroRequest(BaseModel):
+    email: str
+    senha: str
+
+
+class LoginRequest(BaseModel):
     email: str
     senha: str
 
@@ -51,3 +57,32 @@ def registrar(dados: RegistroRequest):
     conn.close()
 
     return {"id": str(usuario_id), "email": dados.email, "data_criacao": agora}
+
+
+@router.post("/login")
+def login(dados: LoginRequest):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT id, senha_hash FROM USUARIO WHERE email = %s",
+        (dados.email,),
+    )
+
+    resultado = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if resultado is None:
+        raise HTTPException(status_code=401, detail="Email ou senha inválidos")
+
+    usuario_id, senha_hash = resultado
+
+    if not bcrypt.checkpw(dados.senha.encode("utf-8"), senha_hash.encode("utf-8")):
+        raise HTTPException(status_code=401, detail="Email ou senha inválidos")
+
+    token = secrets.token_hex(32)
+    TOKENS[token] = str(usuario_id)
+
+    return {"token": token}
