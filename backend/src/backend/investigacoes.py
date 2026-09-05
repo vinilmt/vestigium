@@ -80,3 +80,49 @@ def criar_investigacao(
     conn.close()
 
     return {"mensagem": "Investigação criada com sucesso", "id": str(investigacao_id)}
+
+
+@router.get("")
+def listar_investigacoes(usuario_id: str = Depends(obter_usuario_id_atual)):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            id,
+            usuario_id,
+            titulo,
+            tipo_entrada,
+            conteudo_original,
+            status,
+            data_criacao,
+            data_atualizacao
+        FROM INVESTIGACAO
+        WHERE usuario_id = %s
+        """,
+        (usuario_id,),
+    )
+
+    resultados = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    investigacoes = []
+
+    for item in resultados:
+        investigacoes.append(
+            {
+                "id": str(item[0]),
+                "usuario_id": str(item[1]),
+                "titulo": item[2],
+                "tipo_entrada": item[3],
+                "conteudo_original": item[4],
+                "status": item[5],
+                "data_criacao": item[6],
+                "data_atualizacao": item[7],
+            }
+        )
+
+    return investigacoes
