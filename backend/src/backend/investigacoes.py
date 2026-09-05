@@ -20,6 +20,13 @@ class InvestigacaoCreate(BaseModel):
     conteudo_original: str
 
 
+class InvestigacaoUpdate(BaseModel):
+    titulo: str | None = None
+    status: str | None = None
+    tipo_entrada: str | None = None
+    conteudo_original: str | None = None
+
+
 def validar_tipo_entrada(tipo_entrada: str) -> None:
     if tipo_entrada not in TIPOS_ENTRADA_VALIDOS:
         raise HTTPException(
@@ -174,3 +181,56 @@ def buscar_investigacao(
         "data_criacao": resultado[6],
         "data_atualizacao": resultado[7],
     }
+
+
+@router.patch("/{investigacao_id}")
+def alterar_investigacao(
+    investigacao_id: uuid.UUID,
+    dados: InvestigacaoUpdate,
+    usuario_id: str = Depends(obter_usuario_id_atual),
+):
+    if dados.tipo_entrada is not None:
+        validar_tipo_entrada(dados.tipo_entrada)
+
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT usuario_id FROM INVESTIGACAO WHERE id = %s",
+        (str(investigacao_id),),
+    )
+
+    resultado = cursor.fetchone()
+
+    if resultado is None:
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=404, detail="Investigação não encontrada")
+
+    if str(resultado[0]) != usuario_id:
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    campos = {
+        chave: valor
+        for chave, valor in dados.model_dump(exclude_unset=True).items()
+        if valor is not None
+    }
+
+    agora = datetime.now(tz=ZoneInfo("America/Sao_Paulo"))
+    campos["data_atualizacao"] = agora
+
+    set_clause = ", ".join(f"{chave} = %s" for chave in campos)
+
+    cursor.execute(
+        f"UPDATE INVESTIGACAO SET {set_clause} WHERE id = %s",
+        (*campos.values(), str(investigacao_id)),
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return {"mensagem": "Investigação atualizada com sucesso"}
