@@ -126,3 +126,51 @@ def listar_investigacoes(usuario_id: str = Depends(obter_usuario_id_atual)):
         )
 
     return investigacoes
+
+
+@router.get("/{investigacao_id}")
+def buscar_investigacao(
+    investigacao_id: uuid.UUID,
+    usuario_id: str = Depends(obter_usuario_id_atual),
+):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            id,
+            usuario_id,
+            titulo,
+            tipo_entrada,
+            conteudo_original,
+            status,
+            data_criacao,
+            data_atualizacao
+        FROM INVESTIGACAO
+        WHERE id = %s
+        """,
+        (str(investigacao_id),),
+    )
+
+    resultado = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if resultado is None:
+        raise HTTPException(status_code=404, detail="Investigação não encontrada")
+
+    if str(resultado[1]) != usuario_id:
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    return {
+        "id": str(resultado[0]),
+        "usuario_id": str(resultado[1]),
+        "titulo": resultado[2],
+        "tipo_entrada": resultado[3],
+        "conteudo_original": resultado[4],
+        "status": resultado[5],
+        "data_criacao": resultado[6],
+        "data_atualizacao": resultado[7],
+    }
