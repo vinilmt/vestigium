@@ -4,6 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import bcrypt
+import psycopg2
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel
 
@@ -43,15 +44,21 @@ def registrar(dados: RegistroRequest):
     agora = datetime.now(tz=ZoneInfo("America/Sao_Paulo"))
     usuario_id = uuid.uuid4()
 
-    cursor.execute(
-        """
-        INSERT INTO USUARIO (id, email, senha_hash, data_criacao)
-        VALUES (%s, %s, %s, %s)
-        """,
-        (str(usuario_id), dados.email, senha_hash.decode("utf-8"), agora),
-    )
+    try:
+        cursor.execute(
+            """
+            INSERT INTO USUARIO (id, email, senha_hash, data_criacao)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (str(usuario_id), dados.email, senha_hash.decode("utf-8"), agora),
+        )
 
-    conn.commit()
+        conn.commit()
+    except psycopg2.errors.UniqueViolation:
+        conn.rollback()
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=409, detail="Email já cadastrado")
 
     cursor.close()
     conn.close()

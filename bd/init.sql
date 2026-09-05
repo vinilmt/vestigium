@@ -1,6 +1,6 @@
 CREATE TABLE USUARIO (
     id UUID PRIMARY KEY,
-    email VARCHAR NOT NULL,
+    email VARCHAR NOT NULL UNIQUE,
     senha_hash VARCHAR NOT NULL,
     data_criacao TIMESTAMP NOT NULL
 );
