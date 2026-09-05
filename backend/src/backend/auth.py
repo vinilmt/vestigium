@@ -48,7 +48,7 @@ def registrar(dados: RegistroRequest):
         INSERT INTO USUARIO (id, email, senha_hash, data_criacao)
         VALUES (%s, %s, %s, %s)
         """,
-        (usuario_id, dados.email, senha_hash.decode("utf-8"), agora),
+        (str(usuario_id), dados.email, senha_hash.decode("utf-8"), agora),
     )
 
     conn.commit()

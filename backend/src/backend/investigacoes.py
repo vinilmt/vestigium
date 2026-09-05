@@ -70,7 +70,7 @@ def criar_investigacao(
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
         (
-            investigacao_id,
+            str(investigacao_id),
             usuario_id,
             dados.titulo,
             dados.tipo_entrada,
