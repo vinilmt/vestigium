@@ -111,3 +111,10 @@ def me(usuario_id: str = Depends(obter_usuario_id_atual)):
         "email": resultado[1],
         "data_criacao": resultado[2],
     }
+
+
+@router.post("/logout")
+def logout(x_token: str = Header(...)):
+    TOKENS.pop(x_token, None)
+
+    return {"mensagem": "Sessão encerrada"}
