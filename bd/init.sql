@@ -111,19 +111,3 @@ CREATE TABLE CONCLUSAO (
         FOREIGN KEY (investigacao_id)
         REFERENCES INVESTIGACAO(id)
 );
-
-
-
-
-INSERT INTO USUARIO (
-    id,
-    email,
-    senha_hash,
-    data_criacao
-)
-VALUES (
-    '00000000-0000-0000-0000-000000000001',
-    'teste@teste.com',
-    'senha-teste',
-    CURRENT_TIMESTAMP
-);
