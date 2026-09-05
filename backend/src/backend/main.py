@@ -1,11 +1,11 @@
-import os
 import uuid
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-import psycopg2
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from backend.db import conectar_banco
 
 app = FastAPI()
 
@@ -15,12 +15,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def conectar_banco():
-    return psycopg2.connect(
-        os.getenv("DATABASE_URL")
-    )
 
 
 @app.get("/")
