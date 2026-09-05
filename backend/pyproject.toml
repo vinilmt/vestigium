@@ -12,6 +12,7 @@ dependencies = [
     "fastapi>=0.141.1",
     "psycopg2-binary>=2.9.12",
     "python-dotenv>=1.2.3",
+    "tzdata>=2026.3",
     "uvicorn[standard]>=0.52.4",
 ]
 
