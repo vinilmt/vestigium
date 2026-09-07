@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-const API_URL = import.meta.env.API_URL;
+import investigacaoService from "./services/investigacaoService";
 
 function App() {
   const [investigacoes, setInvestigacoes] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/investigacoes`)
-      .then((response) => {
-        setInvestigacoes(response.data);
+    investigacaoService
+      .listar()
+      .then((data) => {
+        setInvestigacoes(data);
       })
       .catch((error) => {
         console.error(error);
