@@ -28,6 +28,14 @@
 	text-align: left;
 }
 
+.login-logo {
+	display: block;
+	width: clamp(56px, 9vw, 92px);
+	height: clamp(56px, 9vw, 92px);
+	margin-bottom: 18px;
+	object-fit: contain;
+}
+
 .login-eyebrow,
 .login-kicker {
 	margin: 0 0 18px;
@@ -93,6 +101,13 @@
 	color: #334155;
 	font-size: 0.86rem;
 	font-weight: 700;
+}
+
+.login-form label i {
+	width: 16px;
+	margin-right: 8px;
+	color: #2563eb;
+	text-align: center;
 }
 
 .login-form input {

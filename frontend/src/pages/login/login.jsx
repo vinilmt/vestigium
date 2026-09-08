@@ -1,5 +1,6 @@
 import { useState } from "react";
 import authService from "../../services/authService";
+import logo from "../../assets/images/logo.png";
 import "./login.css";
 
 function Login({ onSuccess }) {
@@ -28,6 +29,7 @@ function Login({ onSuccess }) {
 		<main className="login-page">
 			<section className="login-container">
 				<section className="login-intro" aria-labelledby="login-title">
+					<img className="login-logo" src={logo} alt="Vestigium" />
 					<p className="login-eyebrow">Vestigium</p>
 
 					<h1 id="login-title">Investigue com clareza.</h1>
@@ -48,7 +50,10 @@ function Login({ onSuccess }) {
 					</div>
 
 					<form className="login-form" onSubmit={handleSubmit}>
-						<label htmlFor="email">Email</label>
+						<label htmlFor="email">
+							<i className="fa-solid fa-envelope" aria-hidden="true" />
+							Email
+						</label>
 
 						<input
 							id="email"
@@ -62,7 +67,10 @@ function Login({ onSuccess }) {
 						/>
 
 						<div className="login-label-row">
-							<label htmlFor="senha">Senha</label>
+							<label htmlFor="senha">
+								<i className="fa-solid fa-marker" aria-hidden="true" />
+								Senha
+							</label>
 						</div>
 
 						<input

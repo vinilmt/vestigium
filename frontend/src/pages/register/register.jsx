@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
+import logo from "../../assets/images/logo.png";
 import "./register.css";
 
 function Register() {
@@ -37,6 +38,7 @@ function Register() {
     <main className="register-page">
       <section className="register-container">
         <section className="register-intro" aria-labelledby="register-title">
+          <img className="register-logo" src={logo} alt="Vestigium" />
           <p className="register-eyebrow">Vestigium</p>
           <h1 id="register-title">Comece sua investigação.</h1>
           <p className="register-description">
@@ -53,7 +55,10 @@ function Register() {
           </div>
 
           <form className="register-form" onSubmit={handleSubmit}>
-          <label htmlFor="register-email">Email</label>
+          <label htmlFor="register-email">
+            <i className="fa-solid fa-envelope" aria-hidden="true" />
+            Email
+          </label>
           <input
             id="register-email"
             name="email"
@@ -65,7 +70,10 @@ function Register() {
             required
           />
 
-          <label htmlFor="register-senha">Senha</label>
+          <label htmlFor="register-senha">
+            <i className="fa-solid fa-marker" aria-hidden="true" />
+            Senha
+          </label>
           <input
             id="register-senha"
             name="senha"
@@ -78,7 +86,10 @@ function Register() {
             required
           />
 
-          <label htmlFor="register-confirmacao">Confirmar senha</label>
+          <label htmlFor="register-confirmacao">
+            <i className="fa-solid fa-marker" aria-hidden="true" />
+            Confirmar senha
+          </label>
           <input
             id="register-confirmacao"
             name="confirmacao"
