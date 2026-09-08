@@ -1,6 +1,8 @@
+import "./investigacao.css";
+
 function Investigacao() {
   return (
-    <main>
+    <main className="investigacao-page">
       <h1>Criar investigação</h1>
       <p>tela de investigação</p>
     </main>

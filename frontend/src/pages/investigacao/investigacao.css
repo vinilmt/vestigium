@@ -1,0 +1,27 @@
+.investigacao-page {
+	min-height: 100svh;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: clamp(24px, 5vw, 64px);
+	background: #f6f8fb;
+	color: #1f2937;
+}
+
+.investigacao-page h1 {
+	margin: 0;
+	color: #172033;
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: clamp(2.4rem, 6vw, 4.8rem);
+	font-weight: 500;
+	letter-spacing: 0;
+	line-height: 0.98;
+}
+
+.investigacao-page p {
+	margin-top: 20px;
+	color: #64748b;
+	font-size: 1rem;
+}
