@@ -1,5 +1,4 @@
 .direnv
-.env
 frontend/nginx.conf
 
 .vscode/*
