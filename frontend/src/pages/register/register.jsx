@@ -25,7 +25,11 @@ function Register() {
 
     try {
       await authService.register(email, senha);
-      navigate("/login");
+      navigate("/login", {
+        state: {
+          sucesso: "Cadastro realizado com sucesso! Agora faça login."
+        }
+      })
     } catch (error) {
       const mensagem = error.response?.data?.detail;
       setErro(mensagem || "Não foi possível criar a conta. Tente novamente.");
@@ -55,62 +59,62 @@ function Register() {
           </div>
 
           <form className="register-form" onSubmit={handleSubmit}>
-          <label htmlFor="register-email">
-            <i className="fa-solid fa-envelope" aria-hidden="true" />
-            Email
-          </label>
-          <input
-            id="register-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="voce@exemplo.com"
-            required
-          />
+            <label htmlFor="register-email">
+              <i className="fa-solid fa-envelope" aria-hidden="true" />
+              Email
+            </label>
+            <input
+              id="register-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="voce@exemplo.com"
+              required
+            />
 
-          <label htmlFor="register-senha">
-            <i className="fa-solid fa-marker" aria-hidden="true" />
-            Senha
-          </label>
-          <input
-            id="register-senha"
-            name="senha"
-            type="password"
-            autoComplete="new-password"
-            value={senha}
-            onChange={(event) => setSenha(event.target.value)}
-            placeholder="Crie uma senha"
-            minLength={6}
-            required
-          />
+            <label htmlFor="register-senha">
+              <i className="fa-solid fa-marker" aria-hidden="true" />
+              Senha
+            </label>
+            <input
+              id="register-senha"
+              name="senha"
+              type="password"
+              autoComplete="new-password"
+              value={senha}
+              onChange={(event) => setSenha(event.target.value)}
+              placeholder="Crie uma senha"
+              minLength={6}
+              required
+            />
 
-          <label htmlFor="register-confirmacao">
-            <i className="fa-solid fa-marker" aria-hidden="true" />
-            Confirmar senha
-          </label>
-          <input
-            id="register-confirmacao"
-            name="confirmacao"
-            type="password"
-            autoComplete="new-password"
-            value={confirmacao}
-            onChange={(event) => setConfirmacao(event.target.value)}
-            placeholder="Repita sua senha"
-            minLength={6}
-            required
-          />
+            <label htmlFor="register-confirmacao">
+              <i className="fa-solid fa-marker" aria-hidden="true" />
+              Confirmar senha
+            </label>
+            <input
+              id="register-confirmacao"
+              name="confirmacao"
+              type="password"
+              autoComplete="new-password"
+              value={confirmacao}
+              onChange={(event) => setConfirmacao(event.target.value)}
+              placeholder="Repita sua senha"
+              minLength={6}
+              required
+            />
 
-          {erro && (
-            <p className="register-error" role="alert">
-              {erro}
-            </p>
-          )}
+            {erro && (
+              <p className="register-error" role="alert">
+                {erro}
+              </p>
+            )}
 
-          <button className="register-submit" type="submit" disabled={carregando}>
-            {carregando ? "Criando conta..." : "Criar conta"}
-          </button>
+            <button className="register-submit" type="submit" disabled={carregando}>
+              {carregando ? "Criando conta..." : "Criar conta"}
+            </button>
           </form>
 
           <p className="register-footer">

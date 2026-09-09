@@ -184,6 +184,13 @@
 	line-height: 1.4;
 }
 
+.login-success {
+	margin: 2px 0 4px;
+	color: #16a34a;
+	font-size: 0.82rem;
+	line-height: 1.4;
+}
+
 .login-footer {
 	margin: 28px 0 0;
 	color: #64748b;

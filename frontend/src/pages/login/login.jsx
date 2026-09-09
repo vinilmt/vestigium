@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import logo from "../../assets/images/logo.png";
 import "./login.css";
@@ -8,6 +9,9 @@ function Login({ onSuccess }) {
 	const [senha, setSenha] = useState("");
 	const [erro, setErro] = useState("");
 	const [carregando, setCarregando] = useState(false);
+
+	const location = useLocation();
+	const mensagemSucesso = location.state?.sucesso;
 
 	async function handleSubmit(event) {
 		event.preventDefault();
@@ -93,6 +97,12 @@ function Login({ onSuccess }) {
 						{erro && (
 							<p className="login-error" role="alert">
 								{erro}
+							</p>
+						)}
+
+						{mensagemSucesso && (
+							<p className="login-success" role="status">
+								{mensagemSucesso}
 							</p>
 						)}
 
