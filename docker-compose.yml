@@ -1,6 +1,6 @@
 services:
   bd:
-    build: ./bd
+    image: docker.io/vinilmt/vestigium_bd:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -9,7 +9,7 @@ services:
       - "5432:5432"
 
   backend:
-    build: ./backend
+    image: docker.io/vinilmt/vestigium_backend:latest
     environment:
       DATABASE_URL: postgresql://postgres:postgres@bd:5432/vestigium
     env_file:
@@ -20,7 +20,7 @@ services:
       - bd
 
   frontend:
-    build: ./frontend
+    image: docker.io/vinilmt/vestigium_frontend:latest
     environment:
       API_URL: http://localhost:8000
     ports:
