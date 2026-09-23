@@ -76,3 +76,15 @@ def identificar_afirmacoes(conteudo: str) -> list[str]:
     )
 
     return _gerar_lista_json(prompt)
+
+
+def gerar_perguntas(texto_afirmacao: str) -> list[str]:
+    prompt = (
+        "Você é um assistente de checagem de fatos. Para a afirmação abaixo, "
+        "gere perguntas orientadoras que ajudem uma pessoa a investigar e "
+        "analisar criticamente essa afirmação. Retorne APENAS um array JSON "
+        "de strings, uma string por pergunta, sem comentários adicionais.\n\n"
+        f"Afirmação:\n{texto_afirmacao}"
+    )
+
+    return _gerar_lista_json(prompt)
