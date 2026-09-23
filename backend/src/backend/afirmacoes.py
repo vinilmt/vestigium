@@ -194,3 +194,37 @@ def criar_perguntas(
     conn.close()
 
     return perguntas_criadas
+
+
+@router_afirmacoes.post("/{afirmacao_id}/investigar")
+def investigar_afirmacao(
+    afirmacao_id: uuid.UUID,
+    usuario_id: str = Depends(obter_usuario_id_atual),
+):
+    conn = conectar_banco()
+    cursor = conn.cursor()
+
+    try:
+        afirmacao = _obter_afirmacao_com_posse(cursor, afirmacao_id, usuario_id)
+    except HTTPException:
+        cursor.close()
+        conn.close()
+        raise
+
+    try:
+        perguntas_criadas = _gerar_e_persistir_perguntas(
+            cursor, afirmacao["id"], afirmacao["texto"]
+        )
+    except HTTPException:
+        cursor.close()
+        conn.close()
+        raise
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    afirmacao["perguntas"] = perguntas_criadas
+
+    return afirmacao
