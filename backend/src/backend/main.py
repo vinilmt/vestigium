@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.afirmacoes import router_afirmacoes, router_investigacoes
 from backend.auth import router as auth_router
 from backend.investigacoes import router as investigacoes_router
 
@@ -15,6 +16,8 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(investigacoes_router)
+app.include_router(router_investigacoes)
+app.include_router(router_afirmacoes)
 
 
 @app.get("/")
